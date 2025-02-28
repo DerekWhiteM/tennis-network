@@ -1,0 +1,46 @@
+{
+	"name": "tennis-network",
+	"private": true,
+	"version": "0.0.1",
+	"type": "module",
+	"scripts": {
+		"dev": "vite dev",
+		"build": "vite build",
+		"preview": "vite preview",
+		"prepare": "svelte-kit sync || echo ''",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"test:unit": "vitest --no-file-parallelism",
+		"test": "npm run test:unit -- --run",
+		"migrate:dev": "npx cross-env NODE_ENV=development knex migrate:latest",
+		"migrate:test": "npx cross-env NODE_ENV=test knex migrate:latest",
+		"seed:dev": "npx cross-env NODE_ENV=development knex seed:run"
+	},
+	"imports": {
+		"#src/*": "./src/*"
+	},
+	"devDependencies": {
+		"@sveltejs/adapter-auto": "^4.0.0",
+		"@sveltejs/kit": "^2.16.0",
+		"@sveltejs/vite-plugin-svelte": "^5.0.0",
+		"@tailwindcss/forms": "^0.5.9",
+		"@tailwindcss/vite": "^4.0.0",
+		"@testing-library/jest-dom": "^6.6.3",
+		"@testing-library/svelte": "^5.2.4",
+		"@types/bcrypt": "^5.0.2",
+		"@types/node": "^22.13.6",
+		"cross-env": "^7.0.3",
+		"jsdom": "^26.0.0",
+		"svelte": "^5.0.0",
+		"svelte-check": "^4.0.0",
+		"tailwindcss": "^4.0.0",
+		"typescript": "^5.0.0",
+		"vite": "^6.0.0",
+		"vitest": "^3.0.0"
+	},
+	"dependencies": {
+		"bcrypt": "^5.1.1",
+		"knex": "^3.1.0",
+		"pg": "^8.13.3"
+	}
+}
