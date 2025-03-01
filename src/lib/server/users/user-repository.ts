@@ -3,7 +3,7 @@
 */
 
 import knex from "../knex";
-import type { CreateUserData, UserData } from "../types";
+import type { CreateUserData, User } from "../types";
 
 const table = "users";
 const columns = [
@@ -18,9 +18,9 @@ const columns = [
 
 export const userRepository = {
 
-    async create(data: CreateUserData): Promise<UserData> {
+    async create(data: CreateUserData): Promise<User> {
         const rows = await knex(table).returning(columns).insert(data);
-        return rows[0] as unknown as UserData;
+        return rows[0] as unknown as User;
     },
 
     async findById(id: number) {
