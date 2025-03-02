@@ -1,30 +1,51 @@
-import knex from "./knex";
-import type { Session, User } from "./types";
 import { encodeBase32LowerCaseNoPadding, encodeHexLowerCase } from "@oslojs/encoding";
 import { sha256 } from "@oslojs/crypto/sha2";
+import knex from "./knex";
 import type { RequestEvent } from "@sveltejs/kit";
+import type { Session, UserDTO } from "./types";
 
-type SessionValidationResult = { session: Session; user: User } | { session: null; user: null };
-
-export async function validateSessionToken(token: string) {
+export async function validateSessionToken(token: string): Promise<SessionValidationResult> {
 	const session_id = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
-	const rows = await knex.table("sessions").select("session_id", "user_id", "created_at").where("session_id", session_id);
-	const session = rows[0] as Session;
+	const rows = await knex
+		.select(
+			"sessions.session_id",
+			"sessions.user_id",
+			"sessions.expires_at",
+			"users.first_name",
+			"users.last_name",
+			"users.email",
+			"users.type",
+			"users.created_at")
+		.from("sessions")
+		.join("users", "users.user_id", "=", "sessions.user_id")
+		.where("session_id", session_id);
+	const row = rows[0];
 
-	if (row === null) {
-		return { session: null, user: null };
+	const session: Session = {
+		session_id: row.session_id,
+		user_id: row.user_id,
+		expires_at: row.expires_at,
 	}
 
+	const user: UserDTO = {
+		user_id: row.user_id,
+		first_name: row.first_name,
+		last_name: row.last_name,
+		email: row.email,
+		type: row.type,
+		created_at: row.created_at,
+	}
+
+	if (session === null) {
+		return { session: null, user: null };
+	}
 	if (Date.now() >= session.expires_at.getTime()) {
-		db.execute("DELETE FROM session WHERE id = ?", [session.id]);
+		await knex.table("sessions").del().where("session_id", session.session_id);
 		return { session: null, user: null };
 	}
-	if (Date.now() >= session.expiresAt.getTime() - 1000 * 60 * 60 * 24 * 15) {
-		session.expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 30);
-		db.execute("UPDATE session SET expires_at = ? WHERE session.id = ?", [
-			Math.floor(session.expiresAt.getTime() / 1000),
-			session.id
-		]);
+	if (Date.now() >= session.expires_at.getTime() - 1000 * 60 * 60 * 24 * 15) {
+		session.expires_at = new Date(Date.now() + 1000 * 60 * 60 * 24 * 30);
+		await knex.table("sessions").where("session_id", session.session_id).update("expires_at", Math.floor(session.expires_at.getTime() / 1000));
 	}
 	return { session, user };
 }
@@ -74,3 +95,5 @@ export async function createSession(token: string, user_id: number): Promise<Ses
 	await knex.table("sessions").insert(session);
 	return session;
 }
+
+type SessionValidationResult = { session: Session; user: UserDTO } | { session: null; user: null };

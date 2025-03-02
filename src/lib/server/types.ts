@@ -9,6 +9,15 @@ export interface User {
     type: UserType;
 }
 
+export interface UserDTO {
+    user_id: string;
+    first_name: string;
+    last_name: string;
+    email: string;
+    type: UserType;
+    created_at: Date;
+}
+
 export interface CreateUserData {
     first_name: string;
     last_name: string;

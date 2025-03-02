@@ -6,7 +6,7 @@ const config = {
             port: 5432,
             user: "postgres",
             password: "postgres",
-            database: "string-link",
+            database: "tennis-network",
         },
         migrations: {
             tableName: "migrations",
@@ -23,7 +23,7 @@ const config = {
             port: 5432,
             user: "postgres",
             password: "postgres",
-            database: "test-string-link",
+            database: "tennis-network-test",
         },
         migrations: {
             tableName: "migrations",
