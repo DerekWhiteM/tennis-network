@@ -9,7 +9,7 @@ export function up(knex) {
         table.string("last_name", 127).notNullable();
         table.string("email", 255).unique().notNullable();
         table.string("password_hash", 255).notNullable();
-        table.enum("type", ["player", "stringer"]).notNullable();
+        table.enum("type", ["admin", "standard"]).notNullable();
         table.timestamp("created_at").notNullable().defaultTo(knex.fn.now());
     });
 }

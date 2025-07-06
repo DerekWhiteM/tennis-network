@@ -13,7 +13,7 @@ test('test creating a user', async () => {
         last_name: "Doe",
         email: "johndoe@example.com",
         password_hash: await userService.hashPassword("password"),
-        type: "player",
+        type: "standard",
     });
     validateUserSchema(user);
 });

@@ -13,7 +13,7 @@ test('test registering a user', async () => {
         email: "johndoe@example.com",
         password: "password",
         confirm_password: "password",
-        type: "player",
+        type: "standard",
     });
     validateUserSchema(user);
 });

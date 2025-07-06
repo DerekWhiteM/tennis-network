@@ -1,4 +1,4 @@
-export type UserType = "player" | "stringer";
+export type UserType = "admin" | "standard";
 
 export interface User {
     user_id: string;
