@@ -5,7 +5,7 @@ import { assertType, expect } from "vitest";
  * @param {Object} obj
  */
 export const validateUserSchema = (obj: any) => {
-    const NUM_KEYS = 7;
+    const NUM_KEYS = 8;
     expect(Object.keys(obj)).toHaveLength(NUM_KEYS);
     expect(obj.user_id).toBeGreaterThan(0);
     assertType<string>(obj.first_name);

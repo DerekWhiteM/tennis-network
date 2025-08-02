@@ -32,6 +32,10 @@ export const userService = {
 
     async verifyPassword(password: string, password_hash: string) {
         return await bcrypt.compare(password, password_hash) as boolean;
+    },
+
+    async getUsersWithinRadius(latitude: number, longitude: number, radiusMiles: number = 10) {
+        return await userRepository.findWithinRadius(latitude, longitude, radiusMiles);
     }
 
 }

@@ -7,6 +7,12 @@ export interface User {
     email: string;
     password_hash: string;
     type: UserType;
+    created_at: Date;
+    location?: Object;
+}
+
+export interface UserWithDistance extends User {
+    distance_meters: number;
 }
 
 export interface UserDTO {
@@ -24,6 +30,7 @@ export interface CreateUserData {
     email: string;
     password_hash: string;
     type: UserType;
+    location?: Object;
 }
 
 export interface RegisterUserData {
