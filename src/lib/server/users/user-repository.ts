@@ -77,4 +77,25 @@ export const userRepository = {
         return rows as unknown as UserWithDistance[];
     },
 
+    async getCoordinatesById(userId: number): Promise<{ latitude: number; longitude: number } | null> {
+        const row = await knex
+            .select([
+                knex.raw('ST_Y(location::geometry) as latitude'),
+                knex.raw('ST_X(location::geometry) as longitude')
+            ])
+            .from(table)
+            .where('user_id', userId)
+            .whereNotNull('location')
+            .first() as { latitude: string; longitude: string } | undefined;
+            
+        if (!row) {
+            return null;
+        }
+        
+        return {
+            latitude: parseFloat(row.latitude),
+            longitude: parseFloat(row.longitude)
+        };
+    },
+
 };

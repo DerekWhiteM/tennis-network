@@ -15,7 +15,8 @@ export async function validateSessionToken(token: string): Promise<SessionValida
             "users.last_name",
             "users.email",
             "users.type",
-            "users.created_at")
+            "users.created_at",
+            "users.location")
         .from("sessions")
         .join("users", "users.user_id", "=", "sessions.user_id")
         .where("session_id", session_id);
@@ -38,6 +39,7 @@ export async function validateSessionToken(token: string): Promise<SessionValida
         email: row.email,
         type: row.type,
         created_at: row.created_at,
+        location: row.location,
     }
 
     if (Date.now() >= session.expires_at.getTime()) {

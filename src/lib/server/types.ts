@@ -22,6 +22,7 @@ export interface UserDTO {
     email: string;
     type: UserType;
     created_at: Date;
+    location?: Object;
 }
 
 export interface CreateUserData {

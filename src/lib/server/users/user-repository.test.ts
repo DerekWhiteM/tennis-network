@@ -64,3 +64,25 @@ test('test finding users within radius', async () => {
     expect(usersInLargerRadius[1].email).toBe("bob@example.com");
     expect(usersInLargerRadius[0].distance_meters).toBeLessThan(usersInLargerRadius[1].distance_meters);
 });
+
+test('test getting coordinates by user ID', async () => {
+    // Test getting coordinates for Alice (user with location)
+    const aliceCoordinates = await userRepository.getCoordinatesById(2); // Alice was created as user ID 2
+    expect(aliceCoordinates).not.toBeNull();
+    expect(aliceCoordinates!.latitude).toBeCloseTo(40.7128, 4); // NYC latitude
+    expect(aliceCoordinates!.longitude).toBeCloseTo(-74.0060, 4); // NYC longitude
+    
+    // Test getting coordinates for Bob (user with location)
+    const bobCoordinates = await userRepository.getCoordinatesById(3); // Bob was created as user ID 3
+    expect(bobCoordinates).not.toBeNull();
+    expect(bobCoordinates!.latitude).toBeCloseTo(39.9526, 4); // Philadelphia latitude
+    expect(bobCoordinates!.longitude).toBeCloseTo(-75.1652, 4); // Philadelphia longitude
+    
+    // Test getting coordinates for John (user without location)
+    const johnCoordinates = await userRepository.getCoordinatesById(1); // John was created as user ID 1 without location
+    expect(johnCoordinates).toBeNull();
+    
+    // Test getting coordinates for non-existent user
+    const nonExistentCoordinates = await userRepository.getCoordinatesById(999);
+    expect(nonExistentCoordinates).toBeNull();
+});
