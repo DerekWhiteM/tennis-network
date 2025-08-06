@@ -41,6 +41,7 @@ export interface RegisterUserData {
     password: string;
     confirm_password: string;
     type: UserType;
+    location?: { latitude: number; longitude: number };
 }
 
 export interface Session {

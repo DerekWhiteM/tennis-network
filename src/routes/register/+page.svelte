@@ -1,6 +1,23 @@
 <script lang="ts">
 	import type { ActionData } from "./$types";
 	export let form: ActionData;
+
+	function getLocation() {
+		if (!navigator.geolocation) {
+			alert("Geolocation is not supported by your browser.");
+			return;
+		}
+		navigator.geolocation.getCurrentPosition((position) => {
+			const latInput = document.getElementById('form-register.latitude') as HTMLInputElement;
+			const lonInput = document.getElementById('form-register.longitude') as HTMLInputElement;
+			if (latInput && lonInput) {
+				latInput.value = position.coords.latitude.toString();
+				lonInput.value = position.coords.longitude.toString();
+			}
+		}, (error) => {
+			alert("Unable to retrieve your location.");
+		});
+	}
 </script>
 
 <div class="max-w-6xl mx-auto p-8 font-sans">
@@ -65,10 +82,38 @@
 					required
 				/>
 			</div>
+			<div>
+				<label for="form-register.latitude">Latitude</label>
+				<input
+					class="w-full"
+					type="number"
+					step="any"
+					id="form-register.latitude"
+					name="latitude"
+					value={(form as any)?.latitude ?? ""}
+					min="-90" max="90"
+				/>
+			</div>
+			<div>
+				<label for="form-register.longitude">Longitude</label>
+				<input
+					class="w-full"
+					type="number"
+					step="any"
+					id="form-register.longitude"
+					name="longitude"
+					value={(form as any)?.longitude ?? ""}
+					min="-180" max="180"
+				/>
+			</div>
+			<button
+				type="button"
+				class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md font-medium transition-colors duration-200 w-full cursor-pointer mb-2"
+				on:click={getLocation}
+			>Use my current location</button>
 			<button
 				class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md font-medium transition-colors duration-200 w-full cursor-pointer"
-				>Register</button
-			>
+			>Register</button>
 			<div class="flex space-x-2">
                 <p>Already have an account?</p>
 				<a href="/login" class="text-blue-500 hover:underline"

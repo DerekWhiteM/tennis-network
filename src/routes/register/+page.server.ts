@@ -18,6 +18,18 @@ export const actions: Actions = {
             return fail(400, { message: "Passwords do not match." });
         }
 
+        // Handle optional location
+        const latitude = formData.get("latitude")?.toString();
+        const longitude = formData.get("longitude")?.toString();
+        let location = undefined;
+        if (latitude && longitude && latitude !== '' && longitude !== '') {
+            const latNum = Number(latitude);
+            const lonNum = Number(longitude);
+            if (!isNaN(latNum) && !isNaN(lonNum)) {
+                // Pass as string for now; userService/userRepository will convert to knex.raw
+                location = { latitude: latNum, longitude: lonNum };
+            }
+        }
         try {
             await userService.register({
                 first_name: firstName,
@@ -26,6 +38,7 @@ export const actions: Actions = {
                 password: password,
                 confirm_password: confirmPassword,
                 type: "standard",
+                location
             });
         } catch (e: any) {
             return fail(400, { message: "Registration failed." });

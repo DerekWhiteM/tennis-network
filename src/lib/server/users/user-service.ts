@@ -1,6 +1,7 @@
 import type { RegisterUserData } from "../types";
 import { userRepository } from "./user-repository";
 import bcrypt from "bcrypt";
+import knex from "../knex";
 
 export const userService = {
 
@@ -16,13 +17,26 @@ export const userService = {
         if (existing_user) {
             throw "User already exists";
         }
-        const user = await userRepository.create({
-            first_name: data.first_name,
-            last_name: data.last_name,
-            email: data.email,
-            password_hash: await this.hashPassword(data.password),
-            type: data.type,
-        });
+        let user;
+        if (data.location) {
+            // Pass location as knex.raw for PostGIS GEOGRAPHY(POINT, 4326)
+            user = await userRepository.create({
+                first_name: data.first_name,
+                last_name: data.last_name,
+                email: data.email,
+                password_hash: await this.hashPassword(data.password),
+                type: data.type,
+                location: knex.raw(`ST_GeogFromText('POINT(${data.location.longitude} ${data.location.latitude})')`)
+            });
+        } else {
+            user = await userRepository.create({
+                first_name: data.first_name,
+                last_name: data.last_name,
+                email: data.email,
+                password_hash: await this.hashPassword(data.password),
+                type: data.type,
+            });
+        }
         return user;
     },
 
