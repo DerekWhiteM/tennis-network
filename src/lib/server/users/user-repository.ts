@@ -98,4 +98,19 @@ export const userRepository = {
         };
     },
 
+    async update(userId: number, data: Partial<Omit<User, 'user_id' | 'email' | 'created_at' | 'password_hash'>>) {
+        let updateData = { ...data };
+        if (data.location && typeof data.location === 'object' && 'latitude' in data.location && 'longitude' in data.location) {
+            updateData = {
+                ...data,
+                location: knex.raw(`ST_GeogFromText('POINT(${data.location.longitude} ${data.location.latitude})')`)
+            };
+        }
+        const rows = await knex(table)
+            .where('user_id', userId)
+            .update(updateData)
+            .returning(columns);
+        return rows[0] as unknown as User;
+    },
+
 };
