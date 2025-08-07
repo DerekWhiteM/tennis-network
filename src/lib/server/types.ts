@@ -1,7 +1,7 @@
 export type UserType = "admin" | "standard";
 
 export interface User {
-    user_id: string;
+    user_id: number;
     first_name: string;
     last_name: string;
     email: string;
@@ -16,7 +16,7 @@ export interface UserWithDistance extends User {
 }
 
 export interface UserDTO {
-    user_id: string;
+    user_id: number;
     first_name: string;
     last_name: string;
     email: string;

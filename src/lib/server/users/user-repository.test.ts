@@ -86,3 +86,47 @@ test('test getting coordinates by user ID', async () => {
     const nonExistentCoordinates = await userRepository.getCoordinatesById(999);
     expect(nonExistentCoordinates).toBeNull();
 });
+
+test('test updating a user (non-location fields)', async () => {
+    // Create a user
+    const user = await userRepository.create({
+        first_name: 'Charlie',
+        last_name: 'Brown',
+        email: 'charlie@example.com',
+        password_hash: await userService.hashPassword('password'),
+        type: 'standard',
+    });
+    // Update the user's first and last name
+    const updated = await userRepository.update(user.user_id, {
+        first_name: 'Charles',
+        last_name: 'Browne',
+    });
+    expect(updated.user_id).toBe(user.user_id);
+    expect(updated.first_name).toBe('Charles');
+    expect(updated.last_name).toBe('Browne');
+    expect(updated.email).toBe('charlie@example.com');
+    validateUserSchema(updated);
+});
+
+test('test updating a user location', async () => {
+    // Create a user
+    const user = await userRepository.create({
+        first_name: 'Daisy',
+        last_name: 'Duck',
+        email: 'daisy@example.com',
+        password_hash: await userService.hashPassword('password'),
+        type: 'standard',
+    });
+    // Update the user's location (Philadelphia)
+    const updated = await userRepository.update(user.user_id, {
+        location: { latitude: 39.9526, longitude: -75.1652 }
+    });
+    expect(updated.user_id).toBe(user.user_id);
+    expect(updated.location).toBeDefined();
+    validateUserSchema(updated);
+    // Confirm coordinates are correct
+    const coords = await userRepository.getCoordinatesById(user.user_id);
+    expect(coords).not.toBeNull();
+    expect(coords!.latitude).toBeCloseTo(39.9526, 4);
+    expect(coords!.longitude).toBeCloseTo(-75.1652, 4);
+});
