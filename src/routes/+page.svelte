@@ -74,11 +74,20 @@
         <h1 class="text-gray-800 text-2xl md:text-3xl font-bold mb-4 md:mb-0 text-center md:text-left">
             Welcome to Tennis Network, {data.user.first_name}!
         </h1>
-        <form method="POST" action="/logout">
-            <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md font-medium transition-colors duration-200">
-                Logout
+        <div class="flex gap-2 items-center">
+            <button
+                class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md font-medium transition-colors duration-200"
+                on:click={() => goto('/edit-profile')}
+                type="button"
+            >
+                Edit Profile
             </button>
-        </form>
+            <form method="POST" action="/logout">
+                <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md font-medium transition-colors duration-200">
+                    Logout
+                </button>
+            </form>
+        </div>
     </header>
     
     <main>
