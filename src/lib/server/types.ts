@@ -44,6 +44,12 @@ export interface RegisterUserData {
     location?: { latitude: number; longitude: number };
 }
 
+export interface UpdateUserData {
+    first_name?: string;
+    last_name?: string;
+    location?: { latitude: number; longitude: number } | null | Object;
+}
+
 export interface Session {
     session_id: string;
     user_id: number;

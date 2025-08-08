@@ -1,10 +1,29 @@
 <script lang="ts">
     import type { PageProps } from "./$types";
-
     let { data, form }: PageProps = $props();
 
     let first_name = $state(form?.user?.first_name ?? data.user?.first_name ?? "");
     let last_name = $state(form?.user?.last_name ?? data.user?.last_name ?? "");
+    let latitude = $state(form?.user?.location?.latitude ?? data.user?.location?.latitude ?? "");
+    let longitude = $state(form?.user?.location?.longitude ?? data.user?.location?.longitude ?? "");
+
+    function getLocation() {
+        if (!navigator.geolocation) {
+            alert("Geolocation is not supported by your browser.");
+            return;
+        }
+        navigator.geolocation.getCurrentPosition((position) => {
+            latitude = position.coords.latitude.toString();
+            longitude = position.coords.longitude.toString();
+        }, (error) => {
+            alert("Unable to retrieve your location.");
+        });
+    }
+
+    function clearLocation() {
+        latitude = "";
+        longitude = "";
+    }
 </script>
 
 <div class="max-w-6xl mx-auto p-8 font-sans">
@@ -30,6 +49,40 @@
                     required
                     class="w-full"
                 />
+            </div>
+            <div>
+                <label for="latitude">Latitude</label>
+                <input
+                    id="latitude"
+                    name="latitude"
+                    type="number"
+                    step="any"
+                    min="-90"
+                    max="90"
+                    bind:value={latitude}
+                    class="w-full"
+                />
+            </div>
+            <div>
+                <label for="longitude">Longitude</label>
+                <input
+                    id="longitude"
+                    name="longitude"
+                    type="number"
+                    step="any"
+                    min="-180"
+                    max="180"
+                    bind:value={longitude}
+                    class="w-full"
+                />
+            </div>
+            <div class="flex gap-2">
+                <button type="button" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md font-medium transition-colors duration-200 w-full cursor-pointer" onclick={getLocation}>
+                    Use current location
+                </button>
+                <button type="button" class="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded-md font-medium transition-colors duration-200 w-full cursor-pointer" onclick={clearLocation}>
+                    Clear location
+                </button>
             </div>
             <button
                 type="submit"

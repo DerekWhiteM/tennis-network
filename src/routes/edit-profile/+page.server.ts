@@ -7,7 +7,14 @@ export const load = async (event: PageServerLoadEvent) => {
 		return redirect(302, "/login");
 	}
     const currentUser = event.locals.user;
-    return { user: currentUser };
+    let location;
+    if (currentUser) {
+        const coords = await userRepository.getCoordinatesById(currentUser.user_id);
+        if (coords) {
+            location = { latitude: coords.latitude, longitude: coords.longitude };
+        }
+    }
+    return { user: { ...currentUser, location } };
 };
 
 export const actions: Actions = {
@@ -17,13 +24,25 @@ export const actions: Actions = {
         const form = await request.formData();
         const first_name = form.get('first_name') as string;
         const last_name = form.get('last_name') as string;
-        // Optionally handle location update here
+        const latitude = form.get('latitude')?.toString();
+        const longitude = form.get('longitude')?.toString();
+        let location = undefined;
+        if (latitude && longitude && latitude !== '' && longitude !== '') {
+            const latNum = Number(latitude);
+            const lonNum = Number(longitude);
+            if (!isNaN(latNum) && !isNaN(lonNum)) {
+                location = { latitude: latNum, longitude: lonNum };
+            }
+        } else if ((latitude === '' || !latitude) && (longitude === '' || !longitude)) {
+            location = null;
+        }
         try {
             await userRepository.update(user.user_id, {
                 first_name,
-                last_name
+                last_name,
+                location
             });
-            return { success: true, user: { ...user, first_name, last_name } };
+            return { success: true, user: { ...user, first_name, last_name, location } };
         } catch (e) {
             return fail(400, { error: 'Failed to update profile.' });
         }

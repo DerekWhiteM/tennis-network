@@ -3,7 +3,7 @@
 */
 
 import knex from "../knex";
-import type { CreateUserData, User, UserWithDistance } from "../types";
+import type { CreateUserData, UpdateUserData, User, UserWithDistance } from "../types";
 
 const table = "users";
 const columns = [
@@ -98,12 +98,18 @@ export const userRepository = {
         };
     },
 
-    async update(userId: number, data: Partial<Omit<User, 'user_id' | 'email' | 'created_at' | 'password_hash'>>) {
+    async update(userId: number, data: UpdateUserData) {
         let updateData = { ...data };
         if (data.location && typeof data.location === 'object' && 'latitude' in data.location && 'longitude' in data.location) {
             updateData = {
                 ...data,
                 location: knex.raw(`ST_GeogFromText('POINT(${data.location.longitude} ${data.location.latitude})')`)
+            };
+        }
+        if (data.location === null) {
+            updateData = {
+                ...data,
+                location: null
             };
         }
         const rows = await knex(table)
