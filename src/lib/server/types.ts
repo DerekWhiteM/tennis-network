@@ -55,3 +55,22 @@ export interface Session {
     user_id: number;
     expires_at: Date;
 }
+
+export interface Proposal {
+    id: number;
+    user_id: number;
+    location: Object;
+    date_time: Date;
+    notes: string | null;
+    ntrp_min: number | null;
+    ntrp_max: number | null;
+}
+
+export interface CreateProposalData {
+    user_id: number;
+    location: Object;
+    date_time: Date;
+    notes: string | null;
+    ntrp_min: number | null;
+    ntrp_max: number | null;
+}
