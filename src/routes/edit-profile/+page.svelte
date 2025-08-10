@@ -1,5 +1,6 @@
 <script lang="ts">
     import type { PageProps } from "./$types";
+    import Navbar from "#src/componenets/Navbar.svelte";
     let { data, form }: PageProps = $props();
 
     let first_name = $state(form?.user?.first_name ?? data.user?.first_name ?? "");
@@ -27,8 +28,8 @@
 </script>
 
 <div class="max-w-6xl mx-auto p-8 font-sans">
-    <div class="max-w-sm m-auto">
-        <h1 class="text-gray-800 text-3xl font-bold mb-4">Edit Profile</h1>
+    <Navbar title="My Profile" />
+    <div class="max-w-sm">
         <form method="POST" class="space-y-4">
             <div>
                 <label for="first_name">First Name</label>

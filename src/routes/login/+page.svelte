@@ -39,7 +39,7 @@
 				<a href="/register" class="text-blue-500 hover:underline"
 					>Create an account</a
 				>
-				<a href="/forgot-password" class="text-blue-500 hover:underline"
+				<a href="/reset-password" class="text-blue-500 hover:underline"
 					>Reset password</a
 				>
 			</div>
