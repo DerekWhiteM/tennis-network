@@ -24,8 +24,12 @@ export async function load(event: PageServerLoadEvent) {
 	else {
 		const coordinates = await userRepository.getCoordinatesById(currentUserId);
 		if (!coordinates) {
-			throw "Failed to extract coordinates from user location";
-		}
+            return {
+                user: currentUser,
+                nearbyUsers: [],
+                message: "Missing location"
+            }
+        }
 		lat = coordinates.latitude;
 		lng = coordinates.longitude;
 	}
