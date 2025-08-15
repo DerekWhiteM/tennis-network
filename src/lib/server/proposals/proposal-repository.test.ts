@@ -31,12 +31,15 @@ test('test creating a proposal', async () => {
     });
 
     const proposal = await proposalRepository.create({
-        user_id: user.user_id,
-        location: knex.raw("ST_GeogFromText('POINT(-74.0060 40.7128)')"),
         date_time: new Date(),
+        location: {
+            latitude: 40.7128,
+            longitude: -74.0060,
+        },
         notes: "Anyone want to play?",
         ntrp_min: 3.5,
         ntrp_max: 4.0,
+        user_id: user.user_id,
     });
 
     validateProposalSchema(proposal);

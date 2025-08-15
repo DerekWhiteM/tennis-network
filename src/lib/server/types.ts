@@ -41,13 +41,13 @@ export interface RegisterUserData {
     password: string;
     confirm_password: string;
     type: UserType;
-    location?: { latitude: number; longitude: number };
+    location?: Coordinates;
 }
 
 export interface UpdateUserData {
     first_name?: string;
     last_name?: string;
-    location?: { latitude: number; longitude: number } | null | Object;
+    location?: Coordinates | null | Object;
 }
 
 export interface Session {
@@ -66,11 +66,16 @@ export interface Proposal {
     ntrp_max: number | null;
 }
 
-export interface CreateProposalData {
-    user_id: number;
-    location: Object;
-    date_time: Date;
+export interface CreateProposal {
+    date_time: string; 
+    location: Coordinates; 
     notes: string | null;
-    ntrp_min: number | null;
     ntrp_max: number | null;
+    ntrp_min: number | null;
+    user_id: number;
+}
+
+export interface Coordinates {
+    latitude: number;
+    longitude: number;
 }

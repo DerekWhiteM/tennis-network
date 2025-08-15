@@ -1,3 +1,4 @@
+import type { CreateProposal, Proposal } from "../types";
 import knex from "../knex";
 
 const table = "proposals";
@@ -13,9 +14,11 @@ const columns = [
 
 export const proposalRepository = {
 
-    async create(data: CreateProposalData): Promise<Proposal> {
+    async create(data: CreateProposal): Promise<Proposal> {
+        const { latitude, longitude } = data.location;
+        data.location = knex.raw(`ST_GeogFromText('POINT(${longitude} ${latitude})')`) as any;
         const rows = await knex(table).returning(columns).insert(data);
         return rows[0] as unknown as Proposal;
     }
 
-}
+};

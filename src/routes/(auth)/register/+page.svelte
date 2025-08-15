@@ -108,11 +108,11 @@
 			</div>
 			<button
 				type="button"
-				class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md font-medium transition-colors duration-200 w-full cursor-pointer mb-2"
+				class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md font-medium transition-colors duration-200 w-full mb-2"
 				on:click={getLocation}
 			>Use my current location</button>
 			<button
-				class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md font-medium transition-colors duration-200 w-full cursor-pointer"
+				class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md font-medium transition-colors duration-200 w-full"
 			>Register</button>
 			<div class="flex space-x-2">
                 <p>Already have an account?</p>

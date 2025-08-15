@@ -20,7 +20,7 @@
 				/>
 			</div>
 			<button
-				class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md font-medium transition-colors duration-200 w-full cursor-pointer"
+				class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md font-medium transition-colors duration-200 w-full"
 				>Reset password</button
 			>
 			<p>{(form as any)?.message ?? ""}</p>
